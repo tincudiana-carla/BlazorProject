@@ -1,10 +1,21 @@
-using BlazorProject.Components;
+using Microsoft.EntityFrameworkCore;
+using ProjectWithBlazor.Application.Interfaces;
+using ProjectWithBlazor.Components;
+using ProjectWithBlazor.Infrastructure.Context;
+using ProjectWithBlazor.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddDbContextFactory<ProjectWithBlazorDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SimpleBookCatalogConnection"));
+});
+
+builder.Services.AddScoped<IBookRepository, BookRepository>();
 
 var app = builder.Build();
 
